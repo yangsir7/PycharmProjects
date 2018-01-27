@@ -34,3 +34,4 @@ for link in links:
         linkText = gettextonly(link)
         print(linkText)
         # add
+        print('add hello test')
