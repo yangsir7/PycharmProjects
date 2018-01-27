@@ -33,3 +33,4 @@ for link in links:
         url = url.split('#')[0]  # remove location portion
         linkText = gettextonly(link)
         print(linkText)
+        # add
