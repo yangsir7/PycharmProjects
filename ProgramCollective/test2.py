@@ -6,32 +6,31 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from sqlite3 import dbapi2 as sqlite
 import re
+from ProgramCollective import nn
+page='C:\\Users\\yangquan11\\PycharmProjects\\untitled\\nn.db'
+wordids=[1,2,3,4,5]
+hiddenids=[1,2,3,4]
+urlids=[0,2,1]
 
-def gettextonly(soup):
-    v = soup.string
-    if v == None:
-        c = soup.contents
-        resulttext = ''
-        for t in c:
-            subtext = gettextonly(t)
-            resulttext += subtext + '\n'
-        return resulttext
-    else:
-        return v.strip()
+# node outputs
+ai = [1.0]*len(wordids)
+ah = [1.0]*len(hiddenids)
+ao = [1.0]*len(urlids)
+# create weights matrix
+wi = [[hiddenid+wordid for hiddenid in hiddenids] for wordid in wordids]
+wo = [[urlid+hiddenid for urlid in urlids] for hiddenid in hiddenids]
+print(wi)
+print('######')
+print(wo)
 
-page= 'http://www.baidu.com/'
-try:
-    c = urllib.request.urlopen(page)
-except:
-    print("Could not open %s" % page)
-soup = BeautifulSoup(c.read(),"lxml")
-links = soup('a')
-for link in links:
-    if ('href' in dict(link.attrs)):
-        url = urljoin(page, link['href'])
-        if url.find("'") != -1: continue
-        url = url.split('#')[0]  # remove location portion
-        linkText = gettextonly(link)
-        print(linkText)
-        # add
-        print('add hello test')
+
+mynet=nn.searchnet(page)
+mynet.maketables( )
+wWorld,wRiver,wBank =101,102,103
+uWorldBank,uRiver,uEarth =201,202,203
+mynet.generatehiddennode([wWorld,wBank],[uWorldBank,uRiver,uEarth])
+for c in mynet.con.execute('select * from wordhidden'): print(c)
+for c in mynet.con.execute('select * from hiddenurl'): print(c)
+mynet=nn.searchnet(page)
+mynet.trainquery([wWorld,wBank],[uWorldBank,uRiver,uEarth],uWorldBank)
+mynet.getresult([wWorld,wBank],[uWorldBank,uRiver,uEarth])

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-*- coding=cp936 -*-
 
-import searchengine
+import ProgramCollective.searchengine as searchengine
 from sqlite3 import dbapi2 as sqlite
 
 crawler=searchengine.crawler('C:\\Users\\yangquan11\\PycharmProjects\\untitled\\searchindex.db')
