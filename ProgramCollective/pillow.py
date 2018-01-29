@@ -1,27 +1,28 @@
 #!/usr/bin/env python
-#-*- coding=cp936 -*-
+#-*- coding=utf-8 -*-
 
 import ProgramCollective.searchengine as searchengine
 from sqlite3 import dbapi2 as sqlite
 
-crawler=searchengine.crawler('C:\\Users\\yangquan11\\PycharmProjects\\untitled\\searchindex.db')
-# crawler.createindextables( )
+dirfile = 'C:\\Users\\yangquan1\\PycharmProjects\\ProgramCollective\\searchindex.db'
+crawler=searchengine.crawler(dirfile)
+# crawler.createindextables()
 # pages= ['http://www.baidu.com/']
 # crawler.crawl(pages)
-# for row in crawler.con.execute('select * from link'):
+# for row in crawler.con.execute('select * from wordlist'):
 #     try:
 #         print(row)
 #     except:
 #         print('eeee')
-#
+
 # crawler.calculatepagerank( )
 #
-e=searchengine.searcher('C:\\Users\\yangquan11\\PycharmProjects\\untitled\\searchindex.db')
-# cur=crawler.con.execute('select * from pagerank order by score desc')
-# for i in range(3):
-#     a=cur.__next__()
-#     print(a,e.geturlname(a[0]))
-r=e.query('百 度 一 下')
+e=searchengine.searcher(dirfile)
+cur=crawler.con.execute('select * from pagerank order by score desc')
+for i in range(3):
+    a=cur.__next__()
+    print(a,e.geturlname(a[0]))
+r=e.query('浣撹偛')
 # print(r[-1][1])
 # w=e.con.execute("select word from wordlist where rowid= %d" % r[-1][1]).fetchone()
 # print(w)

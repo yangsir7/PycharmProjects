@@ -1,10 +1,16 @@
+#!/usr/bin/env python
+#-*- coding=utf-8 -*-
+
 import urllib.request
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from sqlite3 import dbapi2 as sqlite
 import re
+import jieba
 # Create a list of words to ignore
-ignorewords=set(['the','of','to','and','a','in','is','it'])
+ignorewords=set([u'的',u'包括',u'等',u'是'])
+jieba.add_word('路明非')
+stopwords = ['的','包括','等','是']
 
 class crawler:
     # Initialize the crawler with the name of database
@@ -57,8 +63,12 @@ class crawler:
         splitter = re.compile('[^\u4e00-\u9fa5]*')
         for s in splitter.split(text):
             if s !='':
-                for ss in s:
-                    ws.append(ss)
+                # for s2 in s:
+                s3=jieba.cut(s, cut_all=False)
+                for s4 in s3:
+                    if s4.strip() != '':
+                        ws.append(s4)
+                # ws.append([s4 for s4 in s3 if s4.strip() !=''])
         return ws
         # return [s.lower() for s in splitter.split(text) if s != '']
     # Return true if this url is already indexed
@@ -150,7 +160,7 @@ class searcher:
         clauselist = ''
         wordids = []
         # Split the words by spaces
-        words = q.split(' ')
+        words = jieba.cut(q, cut_all=False)
         tablenumber = 0
         for word in words:
             # Get the word ID
@@ -175,7 +185,7 @@ class searcher:
     def getscoredlist(self, rows, wordids):
         totalscores = dict([(row[0], 0) for row in rows])
         # This is where you'll later put the scoring functions
-        weights = [(1.0,self.frequencyscore(rows)),(1.5,self.locationscore(rows)),(1.0,self.linktextscore(rows,wordids)), \
+        weights = [(1.0,self.frequencyscore(rows)),(1.5,self.locationscore(rows)),
                    (1.0,self.pagerankscore(rows))]
         for (weight, scores) in weights:
             for url in totalscores:
