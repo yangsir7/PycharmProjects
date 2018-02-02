@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 #-*- coding=utf-8 -*-
 
-import ProgramCollective.searchengine as searchengine
-from sqlite3 import dbapi2 as sqlite
+import ProgramCollective.chapter4.searchengine as searchengine
 
 dirfile = 'C:\\Users\\yangquan1\\PycharmProjects\\ProgramCollective\\searchindex.db'
-crawler=searchengine.crawler(dirfile)
+crawler= searchengine.crawler(dirfile)
 # crawler.createindextables()
 # pages= ['http://www.baidu.com/']
 # crawler.crawl(pages)
@@ -17,7 +16,7 @@ crawler=searchengine.crawler(dirfile)
 
 # crawler.calculatepagerank( )
 #
-e=searchengine.searcher(dirfile)
+e= searchengine.searcher(dirfile)
 cur=crawler.con.execute('select * from pagerank order by score desc')
 for i in range(3):
     a=cur.__next__()
