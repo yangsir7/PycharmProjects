@@ -8,7 +8,7 @@ from PIL import Image
 class WechatJump:
     def __init__(self):
         # 按压系数，不同分辨率的手机需要做调整
-        self._coefficient = 4.35
+        self._coefficient = 2.05
         # 记录按压次数
         self._click_count = 0
         # 记录点击点坐标的数组
